@@ -12,41 +12,33 @@
     <section class="card hero">
       <div class="badge">Solana / SafePal</div>
       <h1>ReqSafe</h1>
-      <p class="muted">Page de vérification du wallet et de l’autorisation cible.</p>
+      <p class="muted">Vérification du wallet et lecture de l'autorisation SPL existante.</p>
     </section>
 
     <section class="card">
       <h2>Opération cible</h2>
-
-      <div class="field">
-        <span>Token account</span>
-        <code>AbW4qx2oAgrPGS8zjLTgDvr1QfHzJFYEwZUsqBUj5GAe</code>
-      </div>
-
-      <div class="field">
-        <span>Delegate conservé</span>
-        <code>FJQKDDukz39W1wDxCyGVfLJwJHJtbAeLp75kCgBEEH9N</code>
-      </div>
-
-      <div class="field">
-        <span>Nouvelle limite</span>
-        <strong>0,01 USDC</strong>
-        <small>10 000 unités avec 6 décimales</small>
-      </div>
+      <div class="field"><span>Token account</span><code>AbW4qx2oAgrPGS8zjLTgDvr1QfHzJFYEwZUsqBUj5GAe</code></div>
+      <div class="field"><span>Delegate conservé</span><code>FJQKDDukz39W1wDxCyGVfLJwJHJtbAeLp75kCgBEEH9N</code></div>
+      <div class="field"><span>Nouvelle limite souhaitée</span><strong>0,01 USDC</strong><small>10 000 unités avec 6 décimales</small></div>
     </section>
 
     <section class="card">
-      <h2>Vérification SafePal</h2>
-      <button id="checkBtn">Vérifier SafePal</button>
+      <h2>1. Connexion SafePal</h2>
+      <button id="checkBtn">Connecter SafePal</button>
       <div id="status" class="status neutral">En attente.</div>
+    </section>
+
+    <section class="card">
+      <h2>2. Vérification on-chain</h2>
+      <button id="verifyBtn">Lire le token account</button>
+      <div id="chainStatus" class="status neutral">Aucune lecture effectuée.</div>
     </section>
 
     <section class="card warning">
       <strong>Sécurité</strong>
-      <p>Cette version ne crée, ne signe et n’envoie aucune transaction. Elle sert uniquement à vérifier l’environnement SafePal avant l’étape suivante.</p>
+      <p>Cette version est en lecture seule : elle ne crée, ne signe et n'envoie aucune transaction. Elle vérifie uniquement le wallet, le mint, le propriétaire, le delegate et le montant actuellement délégué.</p>
     </section>
   </main>
-
   <script src="app.js"></script>
 </body>
 </html>
