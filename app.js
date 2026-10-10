@@ -11,25 +11,27 @@ checkBtn.addEventListener('click', async () => {
     const provider = window.safepal || window.solana || null;
 
     if (!provider) {
-      setStatus(
-        'bad',
-        'Aucun provider Solana/SafePal détecté.<br><br>Ouvre cette page depuis le navigateur DApp de SafePal.'
-      );
+      setStatus('bad', 'SafePal non détecté. Ouvre cette page depuis le navigateur DApp de SafePal.');
       return;
     }
 
-    const providerName = window.safepal ? 'SafePal' : 'Provider Solana';
     let publicKey = null;
 
     try {
-      if (provider.publicKey) {
+      if (provider.connect) {
+        const result = await provider.connect();
+        publicKey = result?.publicKey?.toString?.() || provider.publicKey?.toString?.() || null;
+      } else if (provider.publicKey) {
         publicKey = provider.publicKey.toString();
       }
-    } catch (_) {}
+    } catch (err) {
+      setStatus('bad', `Connexion refusée ou impossible : ${String(err.message || err)}`);
+      return;
+    }
 
     setStatus(
       'ok',
-      `<strong>${providerName} détecté.</strong>` +
+      '<strong>SafePal détecté et connecté.</strong>' +
       (publicKey ? `<br>Wallet : <code>${publicKey}</code>` : '') +
       '<br><br>Aucune transaction n’a été créée, signée ou envoyée.'
     );
