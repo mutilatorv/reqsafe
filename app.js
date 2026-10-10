@@ -6,36 +6,48 @@ function setStatus(kind, html) {
   statusBox.innerHTML = html;
 }
 
+checkBtn.textContent = 'Connecter SafePal';
+
 checkBtn.addEventListener('click', async () => {
   try {
-    const provider = window.safepal || window.solana || null;
+    const provider = window.safepal;
 
     if (!provider) {
-      setStatus('bad', 'SafePal non détecté. Ouvre cette page depuis le navigateur DApp de SafePal.');
+      setStatus(
+        'bad',
+        'SafePal non détecté. Ouvre cette page depuis le navigateur DApp de SafePal.'
+      );
       return;
     }
 
-    let publicKey = null;
+    setStatus('neutral', 'Demande de connexion envoyée à SafePal…');
 
     try {
-      if (provider.connect) {
-        const result = await provider.connect();
-        publicKey = result?.publicKey?.toString?.() || provider.publicKey?.toString?.() || null;
-      } else if (provider.publicKey) {
+      await provider.connect();
+
+      let publicKey = null;
+
+      if (typeof provider.getAccount === 'function') {
+        publicKey = await provider.getAccount();
+      }
+
+      if (!publicKey && provider.publicKey) {
         publicKey = provider.publicKey.toString();
       }
-    } catch (err) {
-      setStatus('bad', `Connexion refusée ou impossible : ${String(err.message || err)}`);
-      return;
-    }
 
-    setStatus(
-      'ok',
-      '<strong>SafePal détecté et connecté.</strong>' +
-      (publicKey ? `<br>Wallet : <code>${publicKey}</code>` : '') +
-      '<br><br>Aucune transaction n’a été créée, signée ou envoyée.'
-    );
+      setStatus(
+        'ok',
+        '<strong>SafePal connecté.</strong>' +
+          (publicKey ? `<br><br>Wallet Solana : <code>${publicKey}</code>` : '') +
+          '<br><br>Aucune transaction n’a été créée, signée ou envoyée.'
+      );
+    } catch (err) {
+      setStatus(
+        'bad',
+        `Connexion refusée ou impossible : ${String(err?.message || err)}`
+      );
+    }
   } catch (err) {
-    setStatus('bad', `Erreur : ${String(err.message || err)}`);
+    setStatus('bad', `Erreur : ${String(err?.message || err)}`);
   }
 });
